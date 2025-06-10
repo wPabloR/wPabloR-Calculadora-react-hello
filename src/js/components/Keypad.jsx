@@ -20,4 +20,4 @@ const Keypad = (props) =>{
     );
 };
 
-export default Keypad
+export default Keypad;

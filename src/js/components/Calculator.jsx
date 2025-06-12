@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Display from "./Display";
 import Keypad from "./Keypad";
 import "./calculatorStyle.css"
 
 
 
+
 const Calculator = () => {
 
 	const [input, setInput] = useState("0");
+	const inputRef = useRef(input);
+
+	useEffect(() => {
+		inputRef.current = input;
+	}, [input]);
 
 	const handleButtonClick = (value) => {
 		if (value === `C`) {
@@ -73,8 +79,6 @@ const Calculator = () => {
 	};
 
 
-
-
 	const calculate = (tokens) => {
 		while (tokens.includes("X") || (tokens.includes("÷"))) {
 			for (let i = 0; i < tokens.length; i++) {
@@ -102,6 +106,40 @@ const Calculator = () => {
 		}
 		return tokens[0]
 	}
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			const key = e.key;
+
+			const allowedKeys = [
+				"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+				".", "+", "-", "*", "/", "%", "Enter", "Backspace"
+			];
+
+			if (!allowedKeys.includes(key)) return;
+
+			if (key == "Enter") {
+				// Uso inputRef.current que está siempre actualizado
+				const tokens = tokenize(inputRef.current);
+				const result = calculate(tokens);
+				setInput(result.toString());
+			} else if (key == "Backspace") {
+				handleButtonClick("⌫")
+			} else if (key == "*") {
+				handleButtonClick("X")
+			} else if (key == "/") {
+				handleButtonClick("÷")
+			} else {
+				handleButtonClick(key)
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown)
+		};
+	}, [])
 
 	return (
 		<div className="calculator">

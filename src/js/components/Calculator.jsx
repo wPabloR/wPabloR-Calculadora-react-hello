@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Display from "./Display";
 import Keypad from "./Keypad";
-
+import "./calculatorStyle.css"
 
 
 
@@ -60,7 +60,7 @@ const Calculator = () => {
 	}
 
 	return (
-		<div>
+		<div className="calculator">
 
 			<Display value={input} />
 			<Keypad onClickButton={handleButtonClick} />

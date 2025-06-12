@@ -1,20 +1,36 @@
 import React from "react";
 
-const Keypad = (props) =>{
-    const buttons = [1,2,3,4,5,6,7,8,9,"C","%","/","*","=","-","+",".","0"];
+const Keypad = (props) => {
+    const buttons = [
+        "C", "%", "/", "*",
+        "7", "8", "9", "-",
+        "4", "5", "6", "+",
+        "1", "2", "3",".",
+        "0", "=", 
+    ];
 
-        
-    return(
-        <div>
-            {buttons.map((button)=>(
-                <button 
-                key={button} 
-                onClick={() => props.onClickButton(button)}
-                style={{ margin: "5px", padding: "10px", minWidth: "40px" }}
-                >
-                    {button}
-                </button>
-            ))}
+
+    return (
+        <div className="keypad">
+            {buttons.map((button) => {
+                let className = "";
+
+                if (button === "=") {
+                    className = "equals";
+                } else if (button === "0") {
+                    className = "zero";
+                }
+
+                return (
+                    <button
+                        key={button}
+                        className={className}
+                        onClick={() => props.onClickButton(button)}
+                    >
+                        {button}
+                    </button>
+                );
+            })}
 
         </div>
     );

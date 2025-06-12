@@ -43,10 +43,11 @@ const Calculator = () => {
 	};
 
 	const deleteLastNum = () => {
-		if (input.length == 1) {
+		const currentInput = inputRef.current;
+		if (currentInput.length == 1) {
 			setInput("0")
 		} else {
-			setInput(input.slice(0, -1))
+			setInput(currentInput.slice(0, -1))
 		}
 	}
 

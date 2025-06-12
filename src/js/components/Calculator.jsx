@@ -16,9 +16,19 @@ const Calculator = () => {
 			const tokens = tokenize(input);
 			const result = calculate(tokens);
 			setInput(result.toString());
+		} else if (value === "⌫") {
+			deleteLastNum()
+		} else if (value === "%") {
+			setInput((prev) => {
+				const match = prev.match(/(\d+\.?\d*)$/);
+				if (!match) return prev;
+				const number = match[1];
+				const percentage = (parseFloat(number) / 100).toString();
+				return prev.slice(0, -number.length) + percentage;
+			});
 		} else {
 			setInput((prev) => {
-				if (prev == 0){
+				if (prev == 0) {
 					return value.toString();
 				}
 				return prev + value
@@ -26,35 +36,69 @@ const Calculator = () => {
 		}
 	};
 
+	const deleteLastNum = () => {
+		if (input.length == 1) {
+			setInput("0")
+		} else {
+			setInput(input.slice(0, -1))
+		}
+	}
 
-	const tokenize = (expresion) => {
-		return expresion.match(/(\d+\.?\d*|\+|\-|\*|\/)/g);
+
+	const tokenize = (expression) => {
+		const tokens = [];
+		let current = '';
+		for (let i = 0; i < expression.length; i++) {
+			const char = expression[i];
+
+			if ("0123456789.".includes(char)) {
+				current += char;
+			} else if ("+-X÷".includes(char)) {
+				// Si es un signo negativo y es el primer carácter o está después de un operador:
+				if (char === '-' && (i === 0 || "+-X÷".includes(expression[i - 1]))) {
+					current += char; // es parte del número
+				} else {
+					if (current) {
+						tokens.push(current);
+						current = '';
+					}
+					tokens.push(char);
+				}
+			}
+		}
+		if (current) {
+			tokens.push(current);
+		}
+		return tokens;
 	};
 
+
+
+
 	const calculate = (tokens) => {
-		while (tokens.includes("*") || (tokens.includes("/"))) {
+		while (tokens.includes("X") || (tokens.includes("÷"))) {
 			for (let i = 0; i < tokens.length; i++) {
-				if ((tokens[i] == "*") || (tokens[i] == "/")) {
+				if ((tokens[i] == "X") || (tokens[i] == "÷")) {
 					let left = parseFloat(tokens[i - 1]);
 					let right = parseFloat(tokens[i + 1]);
-					let result = tokens[i] == "*" ? left * right : left / right; 
+					let result = tokens[i] == "X" ? left * right : left / right;
 					tokens.splice(i - 1, 3, result.toString());
-					break;					
-					
-				}	
+					break;
+
+				}
 			}
 		}
 
 		while (tokens.includes("+") || tokens.includes("-")) {
-			for (let i = 0; i < tokens.length; i++){
-				if ((tokens[i] == "+") || (tokens[i] == "-")){
+			for (let i = 0; i < tokens.length; i++) {
+				if ((tokens[i] == "+") || (tokens[i] == "-")) {
 					let left = parseFloat(tokens[i - 1]);
 					let right = parseFloat(tokens[i + 1]);
 					let result = tokens[i] == "+" ? left + right : left - right;
 					tokens.splice(i - 1, 3, result.toString());
 					break;
 				}
-			}	
+			}
 		}
 		return tokens[0]
 	}

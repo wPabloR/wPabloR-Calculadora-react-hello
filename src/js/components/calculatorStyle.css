@@ -9,7 +9,7 @@
   padding: 10px;
   background: #1b1717;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  
+  font-family: 'Roboto Mono', monospace;
 }
 
 .display {
@@ -59,6 +59,3 @@ button.equals:hover {
   background: #c9302c;
 }
 
-button.zero {
-    grid-column: span 2;
-}

@@ -2,11 +2,11 @@ import React from "react";
 
 const Keypad = (props) => {
     const buttons = [
-        "C", "%", "/", "*",
-        "7", "8", "9", "-",
-        "4", "5", "6", "+",
-        "1", "2", "3",".",
-        "0", "=", 
+        "C", "%", "÷", "⌫",
+        "7", "8", "9", "X",
+        "4", "5", "6", "-",
+        "1", "2", "3","+",
+        "0",".", "="
     ];
 
 
@@ -17,8 +17,6 @@ const Keypad = (props) => {
 
                 if (button === "=") {
                     className = "equals";
-                } else if (button === "0") {
-                    className = "zero";
                 }
 
                 return (
